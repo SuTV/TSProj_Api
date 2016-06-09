@@ -1,0 +1,80 @@
+{
+  "name": "course",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "categoryId": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "userId"
+    },
+    "category": {
+      "type": "belongsTo",
+      "model": "category",
+      "foreignKey": "categoryId"
+    },
+    "plans": {
+       "type": "hasMany",
+       "model": "plan",
+         "foreignKey": "courseId"
+    },
+    "exams": {
+       "type": "hasMany",
+       "model": "exam",
+         "foreignKey": "courseId"
+    },
+    "attachments": {
+       "type": "hasMany",
+       "model": "attachment",
+         "foreignKey": "courseId"
+    },
+    "comments": {
+       "type": "hasMany",
+       "model": "comment",
+         "foreignKey": "courseId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW",
+      "property": "update"
+    }
+  ],
+  "methods": []
+}

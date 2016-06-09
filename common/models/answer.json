@@ -1,0 +1,47 @@
+{
+  "name": "answer",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "sortNumber": {
+      "type": "number",
+      "required": true
+    },
+    "content": {
+      "type": "string",
+      "required": true
+    },
+    "questionId": {
+      "type": "string",
+      "required": true
+    },
+    "isCorrect": {
+      "type": "boolean",
+      "required": true
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "question": {
+      "type": "belongsTo",
+      "model": "question",
+      "foreignKey": "questionId"
+    }
+  },
+  "acls": [],
+  "hidden": ["isCorrect"],
+  "methods": []
+}

@@ -1,0 +1,56 @@
+{
+  "name": "question",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "examId": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "string",
+      "required": true
+    },
+    "sortNumber": {
+      "type": "number",
+      "required": true
+    },
+    "questionType": {
+      "type": "number",
+      "required": true
+    },
+    "isAnswerYesOrTrue": {
+      "type": "boolean",
+      "required": false
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "exam": {
+      "type": "belongsTo",
+      "model": "exam",
+      "foreignKey": "examId"
+    },
+    "answers": {
+       "type": "hasMany",
+       "model": "answer",
+         "foreignKey": "questionId"
+    }
+  },
+  "acls": [],
+  "hidden": ["isAnswerYesOrTrue"],
+  "methods": []
+}

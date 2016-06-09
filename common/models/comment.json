@@ -1,0 +1,52 @@
+{
+  "name": "comment",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "content": {
+      "type": "string",
+      "required": true
+    },
+    "courseId": {
+      "type": "string",
+      "required": false
+    },
+    "lectureId": {
+      "type": "string",
+      "required": false
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "userId"
+    },
+    "course": {
+       "type": "belongsTo",
+       "model": "course",
+         "foreignKey": "courseId"
+    },
+    "lecture": {
+       "type": "belongsTo",
+       "model": "lecture",
+         "foreignKey": "lectureId"
+    }
+  },
+  "acls": [],
+  "methods": []
+}

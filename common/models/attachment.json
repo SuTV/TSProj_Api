@@ -1,0 +1,64 @@
+{
+  "name": "attachment",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": false
+    },
+    "containerName": {
+      "type": "string",
+      "required": true
+    },
+    "fileName": {
+      "type": "string",
+      "required": true
+    },
+    "fileSize" : {
+      "type": "number",
+      "required": false
+    },
+    "fileType": {
+      "type": "string",
+      "required": false
+    },
+    "downloadCount": {
+      "type": "number",
+      "required": false,
+      "default": 0
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "course": {
+      "type": "belongsTo",
+      "model": "course",
+      "foreignKey": "courseId"
+    },
+    "lecture": {
+      "type": "belongsTo",
+      "model": "lecture",
+      "foreignKey": "lectureId"
+    }
+  },
+  "acls": [],
+  "methods": []
+}

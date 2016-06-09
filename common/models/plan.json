@@ -1,0 +1,52 @@
+{
+  "name": "plan",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "startTime": {
+      "type": "date"
+    },
+    "endTime": {
+      "type": "date"
+    },
+    "courseId": {
+      "type": "string",
+      "required": true
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "course": {
+      "type": "belongsTo",
+      "model": "course",
+      "foreignKey": "courseId"
+    },
+    "lectures": {
+       "type": "hasMany",
+       "model": "lecture",
+         "foreignKey": "planId"
+    }
+  },
+  "acls": [],
+  "methods": []
+}

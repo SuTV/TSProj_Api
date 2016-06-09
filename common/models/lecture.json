@@ -1,0 +1,69 @@
+{
+  "name": "lecture",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "planId": {
+      "type": "string",
+      "required": true
+    },
+    "sortNumber": {
+      "type": "number",
+      "default": 0,
+      "required": true
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "plan": {
+      "type": "belongsTo",
+      "model": "plan",
+      "foreignKey": "planId"
+    },
+    "videos": {
+       "type": "hasMany",
+       "model": "video",
+         "foreignKey": "lectureId"
+    },
+    "comments": {
+       "type": "hasMany",
+       "model": "comment",
+         "foreignKey": "lectureId"
+    },
+    "exams": {
+       "type": "hasMany",
+       "model": "exam",
+         "foreignKey": "lectureId"
+    },
+    "attachments": {
+       "type": "hasMany",
+       "model": "attachment",
+         "foreignKey": "lectureId"
+    }
+  },
+  "acls": [],
+  "methods": []
+}

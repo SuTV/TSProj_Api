@@ -1,0 +1,84 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ]
+  },
+  "User": {
+    "dataSource": "db",
+    "public": false
+  },
+  "AccessToken": {
+    "dataSource": "db",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "db",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Role": {
+    "dataSource": "db",
+    "public": false
+  },
+  "Email": {
+    "dataSource": "emailDs"
+  },
+  "user": {
+    "dataSource": "db",
+    "public": true,
+    "options": {
+      "emailVerificationRequired": false
+    }
+  },
+  "category": {
+    "dataSource": "db",
+    "public": true
+  },
+  "course": {
+    "dataSource": "db",
+    "public": true
+  },
+  "plan": {
+    "dataSource": "db",
+    "public": true
+  },
+  "lecture": {
+    "dataSource": "db",
+    "public": true
+  },
+  "comment": {
+    "dataSource": "db",
+    "public": true
+  },
+  "video": {
+    "dataSource": "db",
+    "public": true
+  },
+  "exam": {
+    "dataSource": "db",
+    "public": true
+  },
+  "question": {
+    "dataSource": "db",
+    "public": true
+  },
+  "answer": {
+    "dataSource": "db",
+    "public": true
+  },
+  "attachment": {
+    "dataSource": "db",
+    "public": true
+  },
+  "container": {
+    "dataSource": "storage",
+    "public": true
+  }
+}

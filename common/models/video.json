@@ -1,0 +1,54 @@
+{
+  "name": "video",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "lectureId": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "link": {
+      "type": "string",
+      "required": true
+    },
+    "mimeType": {
+      "type": "string",
+      "required": false
+    },
+    "lengthInSeconds": {
+      "type": "number",
+      "required": false
+    },
+    "size": {
+      "type": "number",
+      "required": false
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "lecture": {
+       "type": "belongsTo",
+       "model": "lecture",
+         "foreignKey": "lectureId"
+    }
+  },
+  "acls": [],
+  "methods": []
+}
