@@ -51,6 +51,6 @@
     }
   },
   "acls": [],
-  "hidden": ["isAnswerYesOrTrue"],
+  "hidden": [],
   "methods": []
 }
