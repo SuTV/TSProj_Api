@@ -41,6 +41,11 @@
        "type": "hasMany",
        "model": "course",
          "foreignKey": "userId"
+    },
+    "feedbacks": {
+       "type": "hasMany",
+       "model": "feedback",
+         "foreignKey": "userId"
     }
   },
   "acls": [

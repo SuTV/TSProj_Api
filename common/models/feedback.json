@@ -1,0 +1,46 @@
+{
+  "name": "feedback",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "string"
+    },
+    "status": {
+      "type": "number",
+      "default": 0
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "userId"
+    },
+    "admin": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "adminUserId"
+    }
+  },
+  "acls": [],
+  "methods": []
+}
