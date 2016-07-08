@@ -16,6 +16,34 @@
       "type": "string",
       "required": false
     },
+    "phone": {
+      "type": "string",
+      "required": false
+    },
+    "userContainerName": {
+      "type": "string",
+      "required": false
+    },
+    "avatarFileName": {
+      "type": "string",
+      "required": false
+    },
+    "facebookLink": {
+      "type": "string",
+      "required": false
+    },
+    "twitterLink": {
+      "type": "string",
+      "required": false
+    },
+    "linkedinLink": {
+      "type": "string",
+      "required": false
+    },
+    "aboutMe": {
+      "type": "string",
+      "required": false
+    },
     "isSystemAdmin": {
       "type": "boolean",
       "required": false,

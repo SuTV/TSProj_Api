@@ -17,7 +17,20 @@
       "required": true
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "required": false
+    },
+    "content": {
+      "type": "string",
+      "required": false
+    },
+    "courseContainerName": {
+      "type": "string",
+      "required": false
+    },
+    "bannerFileName": {
+      "type": "string",
+      "required": false
     },
     "created": {
       "type": "date",

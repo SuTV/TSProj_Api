@@ -20,6 +20,14 @@
       "type": "string",
       "required": true
     },
+    "provider": {
+      "type": "string",
+      "required": false
+    },
+    "embedCode": {
+      "type": "string",
+      "required": false
+    },
     "mimeType": {
       "type": "string",
       "required": false
