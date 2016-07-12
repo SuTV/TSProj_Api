@@ -15,6 +15,11 @@
     "description": {
       "type": "string"
     },
+    "sortNumber": {
+      "type": "number",
+      "default": 0,
+      "required": true
+    },
     "created": {
       "type": "date",
       "defaultFn": "now"

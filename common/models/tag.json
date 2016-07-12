@@ -1,0 +1,33 @@
+{
+  "name": "tag",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "name": {
+      "type": "string"
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "courseTags": {
+       "type": "hasMany",
+       "model": "course-tag",
+         "foreignKey": "tagId"
+    }
+  },
+  "acls": [],
+  "methods": []
+}

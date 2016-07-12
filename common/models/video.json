@@ -28,6 +28,9 @@
       "type": "string",
       "required": false
     },
+    "description": {
+      "type": "string"
+    },
     "mimeType": {
       "type": "string",
       "required": false
@@ -39,6 +42,11 @@
     "size": {
       "type": "number",
       "required": false
+    },
+    "sortNumber": {
+      "type": "number",
+      "default": 0,
+      "required": true
     },
     "created": {
       "type": "date",

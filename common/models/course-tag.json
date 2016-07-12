@@ -1,5 +1,5 @@
 {
-  "name": "answer",
+  "name": "course-tag",
   "base": "PersistedModel",
   "idInjection": false,
   "properties": {
@@ -7,22 +7,6 @@
       "type": "string",
       "id": true,
       "defaultFn": "guid"
-    },
-    "content": {
-      "type": "string",
-      "required": true
-    },
-    "questionId": {
-      "type": "string",
-      "required": true
-    },
-    "isCorrect": {
-      "type": "boolean",
-      "required": true
-    },
-    "sortNumber": {
-      "type": "number",
-      "required": true
     },
     "created": {
       "type": "date",
@@ -35,13 +19,17 @@
   },
   "validations": [],
   "relations": {
-    "question": {
+    "course": {
       "type": "belongsTo",
-      "model": "question",
-      "foreignKey": "questionId"
+      "model": "course",
+      "foreignKey": "courseId"
+    },
+    "tag": {
+      "type": "belongsTo",
+      "model": "tag",
+      "foreignKey": "tagId"
     }
   },
   "acls": [],
-  "hidden": [],
   "methods": []
 }

@@ -72,6 +72,11 @@
        "type": "hasMany",
        "model": "comment",
          "foreignKey": "courseId"
+    },
+    "courseTags": {
+       "type": "hasMany",
+       "model": "course-tag",
+         "foreignKey": "courseId"
     }
   },
   "acls": [

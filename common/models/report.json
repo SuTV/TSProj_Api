@@ -1,5 +1,5 @@
 {
-  "name": "answer",
+  "name": "report",
   "base": "PersistedModel",
   "idInjection": false,
   "properties": {
@@ -8,21 +8,15 @@
       "id": true,
       "defaultFn": "guid"
     },
+    "reason": {
+      "type": "string"
+    },
     "content": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
-    "questionId": {
-      "type": "string",
-      "required": true
-    },
-    "isCorrect": {
-      "type": "boolean",
-      "required": true
-    },
-    "sortNumber": {
+    "status": {
       "type": "number",
-      "required": true
+      "default": 0
     },
     "created": {
       "type": "date",
@@ -35,13 +29,17 @@
   },
   "validations": [],
   "relations": {
-    "question": {
+    "user": {
       "type": "belongsTo",
-      "model": "question",
-      "foreignKey": "questionId"
+      "model": "user",
+      "foreignKey": "userId"
+    },
+    "course": {
+      "type": "belongsTo",
+      "model": "course",
+      "foreignKey": "courseId"
     }
   },
   "acls": [],
-  "hidden": [],
   "methods": []
 }

@@ -32,6 +32,11 @@
       "type": "string",
       "required": false
     },
+    "sortNumber": {
+      "type": "number",
+      "default": 0,
+      "required": true
+    },
     "downloadCount": {
       "type": "number",
       "required": false,
