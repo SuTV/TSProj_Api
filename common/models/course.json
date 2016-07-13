@@ -58,6 +58,11 @@
        "model": "plan",
          "foreignKey": "courseId"
     },
+    "streamlines": {
+       "type": "hasMany",
+       "model": "streamline",
+         "foreignKey": "courseId"
+    },
     "exams": {
        "type": "hasMany",
        "model": "exam",
