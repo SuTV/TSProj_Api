@@ -93,6 +93,10 @@
     "dataSource": "db",
     "public": true
   },
+  "reaction": {
+    "dataSource": "db",
+    "public": true
+  },
   "course-tag": {
     "dataSource": "db",
     "public": false

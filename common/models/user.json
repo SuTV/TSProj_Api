@@ -78,6 +78,11 @@
        "type": "hasMany",
        "model": "feedback",
          "foreignKey": "userId"
+    },
+    "reactions": {
+       "type": "hasMany",
+       "model": "reaction",
+         "foreignKey": "userId"
     }
   },
   "acls": [
