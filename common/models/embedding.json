@@ -1,5 +1,5 @@
 {
-  "name": "video",
+  "name": "embedding",
   "base": "PersistedModel",
   "idInjection": false,
   "properties": {

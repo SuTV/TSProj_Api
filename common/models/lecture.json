@@ -43,9 +43,9 @@
       "model": "plan",
       "foreignKey": "planId"
     },
-    "videos": {
+    "embeddings": {
        "type": "hasMany",
-       "model": "video",
+       "model": "embedding",
          "foreignKey": "lectureId"
     },
     "comments": {

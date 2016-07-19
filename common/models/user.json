@@ -44,6 +44,10 @@
       "type": "string",
       "required": false
     },
+    "totalPoint": {
+      "type": "number",
+      "default": 0
+    },
     "isSystemAdmin": {
       "type": "boolean",
       "required": false,

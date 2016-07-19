@@ -3,7 +3,7 @@ var enableAllMethods = require('../utils/model.js').enableAllMethods;
 
 module.exports = function(Streamline) {
     // disable some endpoints
-    enableAllMethods(Streamline, ['find', 'upsert', 'create', 'updateAll', 'count']);
+    enableAllMethods(Streamline, ['upsert', 'create', 'updateAll', 'count']);
     
     Streamline.observe('before save', function(ctx, next) {
         // update time

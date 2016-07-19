@@ -39,6 +39,10 @@
     "endTime": {
       "type": "date"
     },
+    "totalViewCount": {
+      "type": "number",
+      "default": 0
+    },
     "created": {
       "type": "date",
       "defaultFn": "now"
