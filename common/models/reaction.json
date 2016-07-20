@@ -8,6 +8,14 @@
       "id": true,
       "defaultFn": "guid"
     },
+    "courseId": {
+      "type": "string",
+      "required": true
+    },
+    "userId": {
+      "type": "string",
+      "required": true
+    },
     "type": {
       "type": "number",
       "required": true,

@@ -15,4 +15,20 @@ module.exports = function(Exam) {
         
         next();
     });
+
+    Exam.observe('loaded', function(ctx, next) {
+        var examId = ctx.instance ? ctx.instance.id : ctx.data.id;
+
+        Exam.app.models.Question.count({'examId': examId}, function(err, totalCount) {
+            if (err) next(err);
+
+            if(ctx.instance) {
+                ctx.instance.totalQuestions = totalCount;
+            } else {
+                ctx.data.totalQuestions = totalCount;
+            }
+
+            next();
+        });
+    });
 };

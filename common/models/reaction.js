@@ -2,6 +2,9 @@ var loopback = require('loopback');
 var enableAllMethods = require('../utils/model.js').enableAllMethods;
 
 module.exports = function(Reaction) {
+    // validate
+    Reaction.validatesUniquenessOf('courseId', { scopedTo: ['userId', 'type'], message: 'courseId, userId and type are not unique' });
+
     // disable some endpoints
     enableAllMethods(Reaction, ['find', 'upsert', 'create', 'updateAll', 'count']);
     
