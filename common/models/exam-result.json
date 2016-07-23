@@ -1,0 +1,39 @@
+{
+  "name": "exam-result",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "result": {
+      "type": "string",
+      "required": true
+    },
+    "created": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "lastUpdated": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "userId"
+    },
+    "exam": {
+      "type": "belongsTo",
+      "model": "exam",
+      "foreignKey": "examId"
+    }
+  },
+  "acls": [],
+  "methods": []
+}

@@ -87,6 +87,11 @@
        "type": "hasMany",
        "model": "reaction",
          "foreignKey": "courseId"
+    },
+    "reports": {
+       "type": "hasMany",
+       "model": "report",
+         "foreignKey": "courseId"
     }
   },
   "acls": [

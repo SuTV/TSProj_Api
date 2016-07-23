@@ -83,6 +83,16 @@
        "type": "hasMany",
        "model": "reaction",
          "foreignKey": "userId"
+    },
+    "reports": {
+       "type": "hasMany",
+       "model": "report",
+         "foreignKey": "userId"
+    },
+    "examResults": {
+       "type": "hasMany",
+       "model": "exam-result",
+         "foreignKey": "userId"
     }
   },
   "acls": [

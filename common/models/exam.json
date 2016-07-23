@@ -54,6 +54,11 @@
        "type": "hasMany",
        "model": "question",
          "foreignKey": "examId"
+    },
+    "examResults": {
+       "type": "hasMany",
+       "model": "exam-result",
+         "foreignKey": "examId"
     }
   },
   "acls": [],
