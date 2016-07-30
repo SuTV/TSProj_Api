@@ -16,6 +16,11 @@
       "type": "string",
       "required": false
     },
+    "lengthInMinutes": {
+      "type": "number",
+      "default": 0,
+      "required": true
+    },
     "startTime": {
       "type": "date",
       "required": true

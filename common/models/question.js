@@ -16,7 +16,7 @@ module.exports = function(Question) {
         next();
     });
 
-    function filterIsAnswerYesOrTrueField(ctx, next, userId) {
+    function filterIsAnswerYesOrTrueField(ctx, next, userId, examId) {
         var allowToView = false;
 
         var currentContext = loopback.getCurrentContext();
@@ -25,33 +25,42 @@ module.exports = function(Question) {
             allowToView = currentUser.id === userId;
         }
 
-        if(!allowToView) {
-            if(ctx.instance) {
-                ctx.instance.unsetAttribute('isAnswerYesOrTrue');
-            } else {
-                delete ctx.data.isAnswerYesOrTrue;
-            }
-        }
+        // check current exam result
+        Question.app.models.ExamResult.count({'userId': userId, 'examId': examId}, function(err, totalCount) {
+            if (err) next(err);
 
-        next();
+            allowToView = allowToView || totalCount > 0;
+
+            if(!allowToView) {
+                if(ctx.instance) {
+                    ctx.instance.unsetAttribute('isAnswerYesOrTrue');
+                } else {
+                    delete ctx.data.isAnswerYesOrTrue;
+                }
+            }
+
+            next();
+        });
     };
 
     Question.observe('loaded', function(ctx, next) {
         var examId = ctx.instance ? ctx.instance.examId : ctx.data.examId;
 
         // get exam
-        Question.app.models.Exam.findOne({id: examId, filter: {fields: {id: true, courseId: true, lectureId: true}, include: ['course', 'lecture']}}, function(err, exam) {
+        Question.app.models.Exam.findOne({where: {id: examId}, include: ['course', 'lecture']}, function(err, exam) {
             if(err) next(err);
 
+            exam = exam.toObject();
+
             if(exam && exam.courseId && exam.course) {
-                return filterIsAnswerYesOrTrueField(ctx, next, exam.course.userId);
+                return filterIsAnswerYesOrTrueField(ctx, next, exam.course.userId, examId);
             } else if(exam.lectureId && exam.lecture) {
                 // get plan
-                Question.app.models.Plan.findOne({id: exam.lecture.planId, filter: {fields: {id: true, courseId: true}, include: ['course']}}, function(err, plan) {
+                Question.app.models.Plan.findOne({where: {id: exam.lecture.planId}, include: ['course']}, function(err, plan) {
                     if(err) next(err);
 
                     if(plan && plan.courseId && plan.course) {
-                        return filterIsAnswerYesOrTrueField(ctx, next, plan.course.userId);
+                        return filterIsAnswerYesOrTrueField(ctx, next, plan.course.userId, examId);
                     } else {
                         next(new Error('could not find plan'));
                     }

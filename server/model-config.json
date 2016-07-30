@@ -71,7 +71,7 @@
   },
   "exam-result": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "question": {
     "dataSource": "db",
