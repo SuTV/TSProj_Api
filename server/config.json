@@ -2,6 +2,7 @@
   "restApiRoot": "/api",
   "host": "0.0.0.0",
   "port": 3000,
+  "baseUrl": "http://0.0.0.0:3000",
   "webClientResetPasswordUrl": "http://127.0.0.1:8080/app/#/app/home?resetPassword=true",
   "remoting": {
     "context": {

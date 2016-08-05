@@ -1,0 +1,101 @@
+<div class="modal-header">
+    <h3 class="modal-title" ng-bind="isEdit ? 'Edit course' : 'Create a new course'"></h3>
+</div>
+<div class="modal-body" id="createEditCourseHolderId">
+	<div class="row">
+		<div ng-class="isEdit ? 'col-lg-6' : 'col-lg-12'">
+			<div class="form-group">
+			  	<label>Name <em class="text-muted">(*)</em></label>
+			  	<input type="text" class="form-control" ng-model="course.name" minlength="3" required >
+			</div>
+			<div class="form-group">
+			  	<label>Category</label>
+			  	<select style="width: 100%;"  ui-select2="{allowClear:true}" ng-model="course.categoryId" ng-options="category.id as category.name for category in categories">
+				</select>
+			</div>
+			<div class="form-group">
+		      <label>Description</label>
+		      <textarea class="form-control" rows="4" ng-model="course.description"></textarea>
+		    </div>
+		</div>
+		<div class="col-lg-6" ng-show="isEdit">
+			<div class="form-group">
+	          <label>Banner photo</label>
+	          <div class="row" nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
+	            <div class="col-md-12" ng-hide="image && image !== noImageImg">
+	                  <div ng-show="uploader.isHTML5" class="m-b-md">
+	                      <!-- 3. nv-file-over uploader="link" over-class="className" -->
+	                      <div class="b-a b-dashed p-lg bg-white text-center m-b" nv-file-over="" over-class="b-info" uploader="uploader">
+	                          Drop file here
+	                      </div>
+	                  </div>
+	                  <p ng-show="uploader.isHTML5" class="text-center">or</p>
+	                  <input type="file" nv-file-select="" uploader="uploader" />
+	              </div>
+	              <div class="col-md-12 text-center" ng-show="image && image !== noImageImg">
+	              	<img ng-src="{{image}}" class="w-full">
+	              </div>
+	              <div class="col-md-12 text-center">
+	                <div ng-repeat="item in uploader.queue">
+	                  <div class="m-b">
+	                    <div class="progress progress-xs no-margin m-t-xs" ng-show="uploader.isHTML5">
+	                        <div class="progress-bar bg-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+	                    </div>
+	                  </div>
+	                  <div class="btn-group m-b">
+	                    <button type="button" class="btn btn-stroke btn-info" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">Upload</button>
+	                    <button type="button" class="btn btn-stroke btn-dark" ng-click="item.cancel()" ng-disabled="!item.isUploading">Cancel</button>
+	                    <button type="button" class="btn btn-stroke btn-danger" ng-click="removeFile(item)">Delete</button>
+	                    <button type="button" ng-show="item.isSuccess" ng-disabled="true" class="btn btn-stroke btn-success"><i class="glyphicon glyphicon-ok"></i></button>
+	                    <button type="button" ng-show="item.isCancel" ng-disabled="true" class="btn btn-stroke btn-warning"><i class="glyphicon glyphicon-ban-circle"></i></button>
+	                    <button type="button" ng-show="item.isError" ng-disabled="true" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+	                  </div>
+	                </div>
+	              </div>
+	          </div>
+	        </div>
+		</div>
+	</div>
+	<div class="form-group" ng-show="isEdit">
+		<label>Tag</label>
+		<tags-input ng-model="tags" 
+                display-property="name" 
+                placeholder="Add a tag"
+                on-tag-adding="addTag($tag)"
+                on-tag-removing="removeTag($tag)" 
+                replace-spaces-with-dashes="false"
+                min-length="2"
+                template="tag-template">
+	      	<auto-complete source="searchTags($query)"
+                	min-length="0"
+                	load-on-focus="true"
+                    load-on-empty="true"
+                    max-results-to-show="32"
+                    template="autocomplete-template"></auto-complete>
+	    </tags-input>
+	    <script type="text/ng-template" id="tag-template">
+	      <div class="tag-template">
+	        <div class="right-panel">
+	          <span>{{$getDisplayText()}}</span>
+	          <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+	        </div>
+	      </div>
+	    </script>
+	    
+	    <script type="text/ng-template" id="autocomplete-template">
+	      <div class="autocomplete-template">
+	        <div class="right-panel">
+	          <span ng-bind-html="$highlight($getDisplayText())"></span>
+	        </div>
+	      </div>
+	    </script>
+	</div>
+	<div class="form-group">
+	  	<label>Content</label>
+	  	<ng-ckeditor ng-model="course.content" skin="moono" remove-buttons="Image" remove-plugins="iframe,flash,smiley" msn-count="Number of typed characters:"></ng-ckeditor>
+	</div>
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button ng-class="isEdit ? 'btn btn-primary' : 'btn btn-success'" ng-click="isEdit ? editCourse() : createCourse()" ng-bind="isEdit ? 'Save' : 'Create'"></button>
+</div>

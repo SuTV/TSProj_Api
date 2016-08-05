@@ -1,0 +1,240 @@
+  <ul class="breadcrumb bg-white b-a">
+    <li><a ng-href="{{'/course/' + ((course.name ? course.name : '') | slug).toLowerCase() + '/' + course.id + '/'}}"><i class="glyphicon glyphicon-book text-muted m-r-xs"></i> <span ng-bind="course.name"></span> </a></li>
+    <li class="active" ng-bind="lecture.title"></li>
+  </ul>
+  <div class="row">
+    <div class="col-sm-7">
+      <div class="row row-sm">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-heading">
+              <a ng-href="{{'/user/' + ((course.user ? course.user.username : '') | slug) + '/' + course.user.id + '/'}}" class="pull-left w-32 m-r" popover-placement="bottom-left" popover-is-open="canOpenUserPopover(course.id)" uib-popover-template="'popoverUserQuickInfo.html'" ng-mouseover="callOpenUserPopover(true, course.id, course.user.id)" ng-mouseleave="callOpenUserPopover(false, course.id, course.user.id)" popover-popup-delay="200" popover-popup-close-delay="500">
+                <img src="{{getUserAvatar(course.user.userContainerName, course.user.avatarFileName)}}" class="w-full img-circle">
+              </a>
+              <div class="clear">
+                <a ng-href="{{'/user/' + ((course.user ? course.user.username : '') | slug) + '/' + course.user.id + '/'}}" class="font-bold" ng-bind="course.user.firstName || course.user.lastName ? course.user.firstName + ' ' + course.user.lastName : course.user.username"></a>
+                <div class="text-xxs font-thin text-muted"><strong ng-bind="course.category.name"></strong> - <span am-time-ago="course.created"></span></div>
+              </div>
+            </div>
+            <div class="card-tools" ng-if="isMyOwnData(course.user.id)">
+              <ul class="list-inline">
+                <li class="dropdown">
+                  <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                    <i class="mdi-navigation-more-vert text-md"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                    <li><a href ng-click="openCreateEditAttachmentModal(null)">Add attachment</a></li>
+                    <li><a href ng-click="openCreateEditEmbeddingModal(null)">Add video/slideshow</a></li>
+                    <li><a href ng-click="openCreateExamModal()" ng-show="!exam || !exam.id">Add exam</a></li>
+                    <li><a href ng-click="openCreateEditLectureModal(lecture.plan.id, lecture, true)">Edit</a></li>
+                    <li><a href ng-click="deleteLecture($event)">Delete</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body no-padding-v" ng-show="lecture.description && lecture.description.trim().length > 0">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="panel b-a pos-rlt">
+                    <span class="arrow top pull-left b-white"></span>
+                    <div class="panel-body">
+                      <span ng-bind="lecture.description"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div ng-show="embeddings.length > 0" class="item" set-ng-animate="true">
+              <uib-carousel active="activeEmbeddingIndex" no-wrap="false">
+                <uib-slide ng-repeat="embedding in embeddings" index="$index">
+                  <div class="w-full" style="height:315" ng-show="!embedding.embedCode">
+                    <embed-video width=100% height=315  ng-href="{{embedding.link}}"><a ng-href="{{embedding.link}}">Watch</a></embed-video>
+                  </div>
+                  <div class="w-full" style="height:315" ng-show="embedding.embedCode" ng-bind-html="getTrustHtml(embedding.embedCode)"></div>
+                  <div class="carousel-caption">
+                    <h4 ng-bind="embedding.title"></h4>
+                  </div>
+                </uib-slide>
+              </uib-carousel>
+              <div class="card-tools" ng-if="isMyOwnData(course.user.id)">
+                <ul class="list-inline">
+                  <li class="dropdown">
+                    <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                      <i class="mdi-navigation-more-vert text-md text-white"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                      <li><a href ng-click="openCreateEditEmbeddingModal(embeddings[activeEmbeddingIndex])">Edit</a></li>
+                      <li><a href ng-click="deleteEmbedding($event, embeddings[activeEmbeddingIndex].id)">Delete</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="card-body">
+              <h3 class="no-margin m-b" ng-bind="lecture.title"></h3>
+              <p ng-bind-html="lecture.content">
+              </p>
+              <a md-ink-ripple ng-if="exam && exam.id" class="btn btn-fw btn-lg btn-warning btn-block" ng-href="{{'/exam/' + (exam.title | slug).toLowerCase() + '/' + exam.id + '/'}}" ng-bind="isMyOwnData(course.user.id) ? exam.title : 'Do exam'" ></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <h5 class="no-margin m-b">Files and Attachments</h5>
+          <ul class="list-group md-whiteframe-z0">
+            <li class="list-group-item" ng-repeat="attachment in attachments">
+              <a href="{{apiDomain}}/api/containers/{{attachment.containerName}}/download/{{attachment.fileName}}" target="_blank"><span class="block"> <i class="fa fa-file-excel-o"></i> &nbsp; <span ng-bind="attachment.name"></span> </span></a>
+              <div class="card-tools custom-card-tools" ng-if="isMyOwnData(course.user.id)">
+                <ul class="list-inline">
+                  <li class="dropdown">
+                    <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                      <i class="mdi-navigation-more-vert text-md"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                      <li><a href ng-click="openCreateEditAttachmentModal(attachment)">Edit</a></li>
+                      <li><a href ng-click="deleteAttachment($event, attachment)">Delete</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <span class="clear text-muted" ng-bind="attachment.description"></span>
+            </li>
+            <li class="list-group-item" ng-if="attachments.length === 0">
+              <span>There are no files and attachments now.</span>
+              <div class="card-tools custom-card-tools-x" ng-if="isMyOwnData(course.user.id)">
+                <ul class="list-inline">
+                  <li class="dropdown">
+                    <a ng-click="openCreateEditAttachmentModal(null)" md-ink-ripple class="md-btn md-flat md-btn-circle">
+                      <i class="mdi-content-add text-md"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-12" ng-hide="true">
+          <h5 class="no-margin m-b">Q&A</h5>
+          <ul class="list-group md-whiteframe-z0">
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a1.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Jonathan Doe</a>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a2.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Jack Michale</a>
+                Sectetur adipiscing elit
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a3.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Jessi</a>
+                Sectetur adipiscing elit
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a4.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Sodake</a>
+                Vestibulum ullamcorper sodales nisi nec condimentum
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a class="pull-left w-32 m-r"><img src="images/a3.jpg" class="w-full img-circle" alt="..."></a>
+              <form>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Say something">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">SEND</button>
+                  </span>
+                </div>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <ul class="timeline">
+        <li class="tl-item" ng-show="nextPlan && nextPlan.id">
+          <div ng-class="nextPlan.lectures.length > 0 ? 'tl-wrap b-success' : 'tl-wrap b-primary'">
+            <span class="tl-date text-muted" ng-bind="buildPlanTime(nextPlan.startTime, nextPlan.endTime)"></span>
+            <div ng-class="nextPlan.lectures.length > 0 ? 'tl-content panel panel-card dk block no-padding-bottom' : 'tl-content panel panel-card bg-primary dk block padding-bottom-1'">
+              <span ng-class="nextPlan.lectures.length > 0 ? 'arrow b-white left pull-top' : 'arrow b-primary left pull-top'"></span>
+              <div class="text-lt p-h m-b-sm">
+                <strong ng-bind="nextPlan.title"></strong>
+              </div>
+              <div class="list-group md-whiteframe-z0" ng-show="nextPlan.lectures.length > 0">
+                <a ng-repeat="lec in nextPlan.lectures | orderBy : 'sortNumber'" ng-href="{{'/lecture/' + (lec.title | slug).toLowerCase() + '/' + lec.id + '/'}}" ng-class="lec.id === lecture.id ? 'list-group-item active' : 'list-group-item'">
+                  <span ng-bind="lec.title"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="tl-item" ng-show="currentPlan && currentPlan.id">
+          <div ng-class="currentPlan.lectures.length > 0 ? 'tl-wrap b-success' : 'tl-wrap b-primary'">
+            <span class="tl-date text-muted" ng-bind="buildPlanTime(currentPlan.startTime, currentPlan.endTime)"></span>
+            <div ng-class="currentPlan.lectures.length > 0 ? 'tl-content panel panel-card dk block no-padding-bottom' : 'tl-content panel panel-card bg-primary dk block padding-bottom-1'">
+              <span ng-class="currentPlan.lectures.length > 0 ? 'arrow b-white left pull-top' : 'arrow b-primary left pull-top'"></span>
+              <div class="text-lt p-h m-b-sm">
+                <strong ng-bind="currentPlan.title"></strong>
+              </div>
+              <div class="card-tools custom-card-tools" ng-if="isMyOwnData(course.user.id)">
+                <ul class="list-inline">
+                  <li class="dropdown">
+                    <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                      <i class="mdi-navigation-more-vert text-md"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                      <li><a href ng-click="openCreateEditLectureModal(currentPlan.id, null, false)">Add lecture</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div class="list-group md-whiteframe-z0" ng-show="currentPlan.lectures.length > 0">
+                <a ng-repeat="lec in currentPlan.lectures | orderBy : 'sortNumber'" ng-href="{{'/lecture/' + (lec.title | slug).toLowerCase() + '/' + lec.id + '/'}}" ng-class="lec.id === lecture.id ? 'list-group-item active' : 'list-group-item'">
+                  <span ng-bind="lec.title"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="tl-item" ng-show="previousPlan && previousPlan.id">
+          <div ng-class="previousPlan.lectures.length > 0 ? 'tl-wrap b-success' : 'tl-wrap b-primary'">
+            <span class="tl-date text-muted" ng-bind="buildPlanTime(previousPlan.startTime, previousPlan.endTime)"></span>
+            <div ng-class="previousPlan.lectures.length > 0 ? 'tl-content panel panel-card dk block no-padding-bottom' : 'tl-content panel panel-card bg-primary dk block padding-bottom-1'">
+              <span ng-class="previousPlan.lectures.length > 0 ? 'arrow b-white left pull-top' : 'arrow b-primary left pull-top'"></span>
+              <div class="text-lt p-h m-b-sm">
+                <strong ng-bind="previousPlan.title"></strong>
+              </div>
+              <div class="list-group md-whiteframe-z0" ng-show="previousPlan.lectures.length > 0">
+                <a ng-repeat="lec in previousPlan.lectures | orderBy : 'sortNumber'" ng-href="{{'/lecture/' + (lec.title | slug).toLowerCase() + '/' + lec.id + '/'}}" ng-class="lec.id === lecture.id ? 'list-group-item active' : 'list-group-item'">
+                  <span ng-bind="lec.title"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script type="text/ng-template" id="popoverUserQuickInfo.html">
+    <div ng-include="baseUrl + '/views/popover/user_quick_info.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditEmbeddingModalContent.html">
+    <div ng-include="baseUrl + '/views/modal/embedding/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditAttachmentModalContent.html">
+    <div ng-include="baseUrl + '/views/modal/attachment/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditExamModalContent.html">
+    <div ng-include="baseUrl + '/views/modal/exam/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditLectureModalContent.html">
+    <div ng-include="baseUrl + '/views/modal/lecture/create_edit_modal.html'"></div>
+  </script>

@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h3 class="modal-title">Feedback</h3>
+</div>
+<div class="modal-body" id="feedbackHolderId">
+	<div class="center-block">
+		<div class="text-color m">
+	      <form role="form" name="frmFeedback" ng-submit="sendFeedback()">
+	        <div class="md-form-group">
+	          <input type="text" class="md-input" ng-model="feedback.title" required>
+	          <label>Title</label>
+	        </div>
+	        <div class="md-form-group">
+	          <textarea class="md-input" ng-model="feedback.content" rows="4" required></textarea>
+	          <label>Content</label>
+	        </div>
+	        <button md-ink-ripple type="submit" ng-disabled="frmFeedback.$invalid" class="md-btn md-raised indigo btn-block p-h-md">Send feedback</button>
+	      </form>
+	    </div>
+    </div>
+</div>

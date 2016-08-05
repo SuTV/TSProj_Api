@@ -1,0 +1,27 @@
+<div class="w-full w-auto-xs">
+	<div class="box bg-white" ng-mouseover="onPopoverUserViewDetails(true)" ng-mouseleave="onPopoverUserViewDetails(false)">
+		<div class="box-col w-xxs text-center dk v-m-xs">
+			<a ui-sref="app.user({id: currentUserPopover.id})">
+				<img src="{{getUserAvatar(currentUserPopover.userContainerName, currentUserPopover.avatarFileName)}}" class="w-full img-circle">
+			</a>
+		</div>
+		<div class="box-col">
+			<div class="p-h-sm">
+				<a ui-sref="app.user({id: currentUserPopover.id})" class="font-bold block" ng-bind="currentUserPopover.firstName || currentUserPopover.lastName ? currentUserPopover.firstName + ' ' + currentUserPopover.lastName : currentUserPopover.username"></a>
+				<div class="text-ellipsis text-muted" ng-show="currentUserPopover.aboutMe" ng-bind="currentUserPopover.aboutMe"></div>
+				<span class="font-thin block" ng-bind="'Point: ' + currentUserPopover.totalPoint"></span>
+				<div class="m-xs" ng-show="currentUserPopover.facebookLink || currentUserPopover.twitterLink || currentUserPopover.linkedinLink">
+		          <a class="text-muted" ng-show="currentUserPopover.facebookLink" href="{{currentUserPopover.facebookLink}}" target="_blank">
+		            <i class="fa ui-icon fa-facebook"></i>
+		          </a>
+		          <a class="text-muted" ng-show="currentUserPopover.twitterLink" href="{{currentUserPopover.twitterLink}}" target="_blank">
+		            <i class="fa ui-icon fa-twitter"></i>
+		          </a>
+		          <a class="text-muted" ng-show="currentUserPopover.linkedinLink" href="{{currentUserPopover.linkedinLink}}" target="_blank">
+		            <i class="fa ui-icon fa-linkedin"></i>
+		          </a>
+		        </div>
+			</div>		  	
+		</div>
+	</div>
+</div>

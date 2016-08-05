@@ -1,0 +1,94 @@
+<div class="modal-header">
+    <h3 class="modal-title" ng-show="isViewSignIn">Sign in with your account</h3>
+    <h3 class="modal-title" ng-show="isViewSignUp">Sign up to your account</h3>
+    <h3 class="modal-title" ng-show="isViewForgotPwd">Reset your account password</h3>
+    <h3 class="modal-title" ng-show="isViewResetPwdConfirm">Reset your account password</h3>
+</div>
+<div class="modal-body" id="signInHolderId">
+	<div class="center-block" ng-show="isViewSignIn">
+		<div class="text-color m">
+	      <form role="form" name="frmLogin" ng-submit="doSignIn()">
+	        <div class="md-form-group float-label">
+	          <input type="email" class="md-input" ng-model="credentials.email" required>
+	          <label>Email</label>
+	        </div>
+	        <div class="md-form-group float-label">
+	          <input type="password" class="md-input" ng-model="credentials.password" required>
+	          <label>Password</label>
+	        </div>      
+	        <div class="m-b-md">        
+	          <label class="md-check">
+	            <input type="checkbox" ng-model="rememberMe" ng-checked="rememberMe"><i class="indigo"></i> Keep me signed in
+	          </label>
+	        </div>
+	        <button md-ink-ripple type="submit" ng-disabled="frmLogin.$invalid" class="md-btn md-raised pink btn-block p-h-md">Sign in</button>
+	      </form>
+	    </div>
+
+	    <div class="p-v-lg text-center">
+	      <div class="m-b"><button ng-click="viewForgotPwd()" class="md-btn">Forgot password?</button></div>
+	      <div>Do not have an account? <button ng-click="viewSignUp()" class="md-btn">Create an account</button></div>
+	    </div>
+    </div>
+    <div class="center-block" ng-show="isViewForgotPwd">
+	    <div class="text-color m">
+	      <div class="m-b">
+	        Forgot your password?
+	        <p class="text-xs m-t">Enter your email address below and we will send you instructions on how to change your password.</p>
+	      </div>
+	      <form name="frmReset" ng-submit="requestResetPassword()">
+	        <div class="md-form-group float-label">
+	          <input type="email" ng-model="resetPwd.email" class="md-input" required>
+	          <label>Your Email</label>
+	        </div>
+	        <button md-ink-ripple type="submit" class="md-btn md-raised pink btn-block p-h-md" ng-disabled="frmReset.$invalid" >Send</button>
+	      </form>
+	    </div>
+	    <p id="alerts-container"></p>
+	    <div class="p-v-lg text-center">Return to <button ng-click="viewSignIn()" class="md-btn">sign in</button></div>    
+	</div>
+	<div class="center-block" ng-show="isViewResetPwdConfirm">
+	    <div class="text-color m">
+	      <div class="m-b">
+	        Enter your new password.
+	      </div>
+	      <form name="frmReqResetPwd" ng-submit="submitNewPassword()">
+	        <div class="md-form-group float-label">
+	          <input type="password" ng-model="reqResetPwd.password" class="md-input" minlength="4" required>
+	          <label>New password</label>
+	        </div>
+	        <div class="md-form-group float-label">
+	          <input type="password" ng-model="reqResetPwd.confirmation" class="md-input" minlength="4" required>
+	          <label>Confirm new password</label>
+	        </div>
+	        <button md-ink-ripple type="submit" class="md-btn md-raised pink btn-block p-h-md"  ng-disabled="frmReqResetPwd.$invalid || reqResetPwd.password !== reqResetPwd.confirmation" >Submit</button>
+	      </form>
+	    </div>
+	    <p id="alerts-container"></p>
+	    <div class="p-v-lg text-center">Return to <button ng-click="viewSignIn()" class="md-btn">sign in</button></div>    
+	</div>
+  	<div class="center-block" ng-show="isViewSignUp">
+	    <div class="text-color m">
+	      <form name="frmSignUp" ng-submit="doSignUp()">
+	        <div class="md-form-group float-label">
+	          <input type="email" class="md-input" ng-model="signUpInfo.email" required>
+	          <label>Email</label>
+	        </div>
+	        <div class="md-form-group float-label">
+	          <input type="password" class="md-input" ng-model="signUpInfo.password" required>
+	          <label>Password</label>
+	        </div>
+	        <div class="m-b-md">
+	          <label class="md-check">
+	            <input type="checkbox" ng-model="agree" required><i class="indigo"></i> Agree the <a href>terms and policy</a>
+	          </label>
+	        </div>
+	        <button md-ink-ripple type="submit" ng-disabled="frmSignUp.$invalid" class="md-btn md-raised pink btn-block p-h-md">Sign up</button>
+	      </form>
+	    </div>
+
+	    <div class="p-v-lg text-center">
+	      <div>Already have an account? <button ng-click="viewSignIn()" class="md-btn">Sign in</button></div>
+	    </div>
+  	</div>
+</div>

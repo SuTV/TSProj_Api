@@ -1,0 +1,91 @@
+<div class="row row-sm">
+  <div class="col-sm-4">
+    <div class="panel panel-card">
+      <div class="r-t pos-rlt" md-ink-ripple>
+        <div class="p-lg bg-white-overlay text-center r-t">
+          <a href class="w-xs inline">
+            <img ng-src="{{currentUserAvatar}}" class="img-circle img-responsive">
+          </a>
+          <div class="m-b m-t-sm h2">
+            <span class="" ng-bind="user.firstName || user.lastName ? user.firstName + ' ' + user.lastName : user.username"></span>
+          </div>
+          <a class="btn btn-sm btn-success m-b p-h no-border" ng-hide="true">Following</a>
+        </div>
+      </div>
+      <div class="list-group no-radius no-border">
+        <a class="list-group-item">
+          <span class="pull-right badge">0</span> Messages
+        </a>
+        <a class="list-group-item">
+          <span class="pull-right badge">0</span> Photos
+        </a>
+        <a class="list-group-item">
+          <span class="pull-right badge">0</span> Posts
+        </a>
+      </div>
+      <div class="text-center b-b b-light">
+        <a href class="inline m text-color">
+          <span class="h3 block font-bold">555</span>
+          <em class="text-xs">Followers</em>
+        </a>
+        <a href class="inline m text-color">
+          <span class="h3 block font-bold">555</span>
+          <em class="text-xs">Following</em>
+        </a>
+      </div>
+      <div class="p" ng-show="user.aboutMe || user.facebookLink || user.twitterLink || user.linkedinLink">
+        <p>About</p>
+        <p ng-show="user.aboutMe" ng-bind="user.aboutMe"></p>
+        <div class="m-v" ng-show="user.facebookLink || user.twitterLink || user.linkedinLink">
+          <a class="text-muted" ng-show="user.facebookLink" href="{{user.facebookLink}}" target="_blank">
+            <i class="fa ui-icon fa-facebook"></i>
+          </a>
+          <a class="text-muted" ng-show="user.twitterLink" href="{{user.twitterLink}}" target="_blank">
+            <i class="fa ui-icon fa-twitter"></i>
+          </a>
+          <a class="text-muted" ng-show="user.linkedinLink" href="{{user.linkedinLink}}" target="_blank">
+            <i class="fa ui-icon fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-8">
+    <div class="panel panel-card clearfix">
+      <div class="p-h b-b b-light">
+        <ul class="nav nav-lines nav-md b-info">
+          <li class="active"><a href>Stream</a></li>
+          <li><a href>Photos <span class="badge">0</span></a></li>
+          <li><a href>Posts <span class="badge">0</span></a></li>
+        </ul>
+      </div>
+      <div class="p-h-lg m-b-lg">      
+        <div class="streamline b-l p-v m-l-xs">
+          <div ng-repeat="course in courses" class="sl-item b-info b-l">
+            <!-- <div class="sl-icon">
+              <i class="fa fa-bolt text-info"></i>
+            </div> -->
+            <div class="sl-content">
+              <div class="clear">
+                <div class="m-b-xs">
+                  <a ng-href="{{'/course/' + (course.name | slug).toLowerCase() + '/' + course.id + '/'}}"><strong ng-bind="course.name"></strong></a>
+                  <span class="text-muted-dk block text-xs" am-time-ago="course.created"></span>
+                </div>
+                <div class="m-b">
+                  <div class="w-full w-auto-xs">
+                    <p class="text-muted text-ellipsis" ng-bind="course.description"></p>
+                  </div>
+                  <div class="m-t-xs">
+                    <span class="text-muted"><i ng-class="course.extra.liked ? 'glyphicon glyphicon-heart text-danger' : 'glyphicon glyphicon-heart'"></i> <small ng-bind="course.extra.totalLikes"></small> </span>
+                    <span class="text-muted m-l-sm"><i ng-class="course.extra.joined ? 'glyphicon glyphicon-user text-danger' : 'glyphicon glyphicon-user'"></i> <small ng-bind="course.extra.totalJoins"></small> </span>
+                    <span class="text-muted m-l-sm"><i ng-class="course.extra.joined ? 'glyphicon glyphicon-star text-warning' : 'glyphicon glyphicon-star'"></i> <small ng-bind="course.extra.totalFavorites"></small> </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

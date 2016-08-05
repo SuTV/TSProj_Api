@@ -1,0 +1,142 @@
+  <ul class="breadcrumb bg-white b-a">
+    <li><a ng-href="{{'/course/' + ((course.name ? course.name : '') | slug).toLowerCase() + '/' + course.id + '/'}}"><i class="glyphicon glyphicon-book text-muted m-r-xs"></i> <span ng-bind="course.name"></span> </a></li>
+    <li><a ng-href="{{'/course/' + ((course.name ? course.name : '') | slug).toLowerCase() + '/streamlines/' + course.id + '/'}}">Streamlines</a></li>
+    <li class="active" ng-show="selectedStreamline && selectedStreamline.id" ng-bind="selectedStreamline.title"></li>
+  </ul>
+  <div class="row">
+    <div class="col-sm-7">
+      <div class="row row-sm">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-heading">
+              <a ng-href="{{'/user/' + ((course.user ? course.user.username : '') | slug) + '/' + course.user.id + '/'}}" class="pull-left w-32 m-r" popover-placement="bottom-left" popover-is-open="canOpenUserPopover(course.id)" uib-popover-template="'popoverUserQuickInfo.html'" ng-mouseover="callOpenUserPopover(true, course.id, course.user.id)" ng-mouseleave="callOpenUserPopover(false, course.id, course.user.id)" popover-popup-delay="200" popover-popup-close-delay="500">
+                <img src="{{getUserAvatar(course.user.userContainerName, course.user.avatarFileName)}}" class="w-full img-circle">
+              </a>
+              <div class="clear">
+                <a ng-href="{{'/user/' + ((course.user ? course.user.username : '') | slug) + '/' + course.user.id + '/'}}" class="font-bold" ng-bind="course.user.firstName || course.user.lastName ? course.user.firstName + ' ' + course.user.lastName : course.user.username"></a>
+                <div class="text-xxs font-thin text-muted"><strong ng-bind="course.category.name"></strong> - <span am-time-ago="course.created"></span></div>
+              </div>
+            </div>
+            <div class="card-tools" ng-if="isMyOwnData(course.user.id)">
+              <ul class="list-inline">
+                <li class="dropdown">
+                  <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                    <i class="mdi-navigation-more-vert text-md"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                    <li><a href ng-click="openCreateEditStreamlineModal(null)">Add streamline</a></li>
+                    <li><a href ng-click="openCreateEditStreamlineModal(selectedStreamline)">Edit</a></li>
+                    <li><a href ng-click="deleteStreamline($event, selectedStreamline.id)">Delete</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="item" ng-if="selectedStreamline && selectedStreamline.id">
+              <div class="w-full" style="height:315" ng-show="!selectedStreamline.embedCode">
+                <embed-video width=100% height=315  ng-href="{{selectedStreamline.link}}"><a ng-href="{{selectedStreamline.link}}">Watch</a></embed-video>
+              </div>
+              <div class="w-full" style="height:315" ng-show="selectedStreamline.embedCode" ng-bind-html="getTrustHtml(selectedStreamline.embedCode)"></div>
+            </div>
+            <div class="card-body">
+              <h3 class="no-margin m-b" ng-bind="selectedStreamline.title"></h3>
+              <div ng-bind-html="selectedStreamline.description">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12" ng-hide="true">
+          <h5 class="no-margin m-b">Comments</h5>
+          <ul class="list-group md-whiteframe-z0">
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a1.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Jonathan Doe</a>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a2.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Jack Michale</a>
+                Sectetur adipiscing elit
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a3.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Jessi</a>
+                Sectetur adipiscing elit
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a4.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Sodake</a>
+                Vestibulum ullamcorper sodales nisi nec condimentum
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a class="pull-left w-32 m-r"><img src="images/a3.jpg" class="w-full img-circle" alt="..."></a>
+              <form>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Say something">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">SEND</button>
+                  </span>
+                </div>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <div class="row m-b">
+        <div class="col-sm-12">
+          <div class="tl-content panel panel-card dk block no-padding-bottom">
+            <!-- <span class="arrow b-white left pull-top"></span> -->
+            <div class="text-lt p-h m-b-sm">
+              <strong><i class="fa fa-bolt text-primary m-r-xs"></i> Live streaming schedule</strong>
+              <div class="card-tools custom-card-tools" ng-if="isMyOwnData(course.user.id)">
+                <ul class="list-inline">
+                  <li class="dropdown">
+                    <a ng-click="openCreateEditStreamlineModal(null)" md-ink-ripple class="md-btn md-flat md-btn-circle">
+                      <i class="mdi-content-add text-md"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <ul class="list-group md-whiteframe-z0">
+              <li ng-repeat="streamline in streamlines" ng-class="getItemClass(streamline.id)">
+                <a class="text-ellipsis m-r-lg" ng-click="selectStreamline(streamline)"> <span ng-class="streamline.type === 1 ? 'pull-left text-danger m-r-sm' : 'pull-left text-warning m-r-sm' "><i class="fa fa-circle text-xs"></i></span> <span ng-bind="streamline.title"></span> </a>
+                <small class="text-muted text-md font-thin m-l"> <span ng-bind="streamline.type === 1 ? ((streamline.startTime | date:'H:mm') + ' - ' + (streamline.endTime | date:'H:mm')) : (isSameDate(streamline.startTime, streamline.endTime) ? ((streamline.startTime | date:'dd-MM-yyyy H:mm') + ' - ' + (streamline.endTime | date:'H:mm')) : ((streamline.startTime | date:'dd-MM-yyyy H:mm') + ' - ' + (streamline.endTime | date:'dd-MM-yyyy H:mm')) )"></span></small>
+                <div class="card-tools custom-card-tools-x" ng-if="isMyOwnData(course.user.id)">
+                  <ul class="list-inline">
+                    <li class="dropdown">
+                      <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                        <i class="mdi-navigation-more-vert text-md"></i>
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                        <li><a href ng-click="openCreateEditStreamlineModal(streamline)">Edit</a></li>
+                        <li><a href ng-click="deleteStreamline($event, streamline.id)">Delete</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="list-group-item" ng-hide="streamlines.length > 0">
+                <span class="text-ellipsis m-r-lg"> <span class="pull-left text-muted m-r-sm"><i class="fa fa-circle text-xs"></i></span> There are no streams now.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/ng-template" id="popoverUserQuickInfo.html">
+    <div ng-include="baseUrl + '/views/popover/user_quick_info.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditStreamlineModalContent.html">
+    <div ng-include="baseUrl + '/views/modal/streamline/create_edit_modal.html'"></div>
+  </script>

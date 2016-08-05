@@ -1,0 +1,113 @@
+<div class="padding-out">
+  <div class="box">
+    <div class="col-md-4">
+      <div class="p-lg bg-white-overlay text-center">
+        <a href class="w-xs inline">
+          <img ng-src="{{currentUserAvatar}}" class="img-circle img-responsive">
+        </a>
+        <div class="m-b m-t-sm h2">
+          <span class="text-black" ng-bind="user.firstName || user.lastName ? user.firstName + ' ' + user.lastName : user.username"></span>
+        </div>
+      </div>
+      <ul class="nav nav-lists b-t" ui-nav>
+        <li class="active">
+          <a href>Profile</a>
+        </li>
+        <li>
+          <a href>Stream Settings</a>
+        </li>
+        <li>
+          <a href>Notifications</a>
+        </li>
+        <li>
+          <a href>Organizations</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-8 b-l bg-white bg-auto">
+      <div class="p-md bg-light lt b-b font-bold">Public profile</div>
+      <form role="form" class="p-md col-md-8" name="frmGeneralInfo" ng-submit="updateUserInfo()">
+        <div class="form-group">
+          <label>Profile picture</label>
+          <div class="row" nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
+            <div class="col-md-12" ng-hide="image && image !== userNoAvatarImg">
+                  <div ng-show="uploader.isHTML5" class="m-b-md">
+                      <!-- 3. nv-file-over uploader="link" over-class="className" -->
+                      <div class="b-a b-dashed p-lg bg-white text-center m-b" nv-file-over="" over-class="b-info" uploader="uploader">
+                          Drop file here
+                      </div>
+                  </div>
+                  <p ng-show="uploader.isHTML5" class="text-center">or</p>
+                  <input type="file" nv-file-select="" uploader="uploader" />
+              </div>
+              <div class="col-md-12 p-sm" style="height:300px;" ng-show="image && image !== userNoAvatarImg">
+                <!-- crop area if uploaded image-->
+                <img-crop ng-show="image && image !== userNoAvatarImg" image="image" result-image="croppedImage" result-image-size="250"></img-crop>
+              </div>
+              <div class="col-md-12 text-center">
+                <div ng-repeat="item in uploader.queue">
+                  <div class="m-b">
+                    <div class="progress progress-sm no-margin m-t-xs" ng-show="uploader.isHTML5">
+                        <div class="progress-bar bg-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                    </div>
+                  </div>
+                  <div class="btn-group m-b">
+                    <button type="button" class="btn btn-stroke btn-info" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">Upload</button>
+                    <button type="button" class="btn btn-stroke btn-dark" ng-click="item.cancel()" ng-disabled="!item.isUploading">Cancel</button>
+                    <button type="button" class="btn btn-stroke btn-danger" ng-click="removeFile(item)">Delete</button>
+                    <button type="button" ng-show="item.isSuccess" ng-disabled="true" class="btn btn-stroke btn-success"><i class="glyphicon glyphicon-ok"></i></button>
+                    <button type="button" ng-show="item.isCancel" ng-disabled="true" class="btn btn-stroke btn-warning"><i class="glyphicon glyphicon-ban-circle"></i></button>
+                    <button type="button" ng-show="item.isError" ng-disabled="true" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></button>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" class="form-control" ng-model="user.username" required>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Firstname</label>
+              <input type="text" class="form-control" ng-model="user.firstName">
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>Lastname</label>
+              <input type="text" class="form-control" ng-model="user.lastName">
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" class="form-control" ng-model="user.email" required>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="text" class="form-control" ng-model="user.phone">
+        </div>
+        <div class="form-group">
+          <label>Facebook</label>
+          <input type="text" class="form-control" ng-model="user.facebookLink">
+        </div>
+        <div class="form-group">
+          <label>Twitter</label>
+          <input type="text" class="form-control" ng-model="user.twitterLink">
+        </div>
+        <div class="form-group">
+          <label>Linkedin</label>
+          <input type="text" class="form-control" ng-model="user.linkedinLink">
+        </div>
+        <div class="form-group">
+          <label>About</label>
+          <textarea class="form-control" rows="4" ng-model="user.aboutMe"></textarea>
+        </div>
+        <button type="submit" ng-disabled="frmGeneralInfo.$invalid" class="btn btn-info m-t">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
