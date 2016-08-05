@@ -11,7 +11,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
 
 (function(window, angular, undefined) {'use strict';
 
-var urlBase = "http://0.0.0.0:3000/api";
+var urlBase = "https://ts-proj-api.herokuapp.com/api";
 var authHeader = 'authorization';
 
 function getHost(url) {

@@ -2,7 +2,7 @@
 
 angular.module('app')
   .constant('MODULE_CONFIG', (function() {
-    var baseUrl = 'http://0.0.0.0:3000';
+    var baseUrl = 'https://ts-proj-api.herokuapp.com';
     return [
       {
           name: 'ui.select',
@@ -247,8 +247,8 @@ angular.module('app')
     ]
     })()
   )
-  .constant('API_DOMAIN', 'http://0.0.0.0:3000')
-  .constant('BASE_URL', 'http://0.0.0.0:3000')
+  .constant('API_DOMAIN', 'https://ts-proj-api.herokuapp.com')
+  .constant('BASE_URL', 'https://ts-proj-api.herokuapp.com')
   .constant('PAGING_LIMIT', 3)
   .constant('ATTACHMENT_PREFIX_COURSE', 'c_')
   .constant('ATTACHMENT_PREFIX_LECTURE', 'l_')
