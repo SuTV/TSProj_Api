@@ -9,18 +9,18 @@
     "test": "tape tests/**/*.js"
   },
   "dependencies": {
-    "body-parser": "*",
-    "compression": "*",
-    "errorhandler": "*",
-    "loopback": "*",
-    "loopback-boot": "*",
-    "loopback-component-explorer": "*",
-    "loopback-datasource-juggler": "*",
-    "serve-favicon": "*"
+    "body-parser": "^1.15.2",
+    "compression": "^1.6.2",
+    "errorhandler": "^1.4.3",
+    "loopback": "^2.29.1",
+    "loopback-boot": "^2.21.0",
+    "loopback-component-explorer": "^2.5.0",
+    "loopback-datasource-juggler": "^2.47.0",
+    "serve-favicon": "^2.3.0"
   },
   "devDependencies": {
-    "jshint": "*",
-    "tape": "*"
+    "jshint": "^2.9.2",
+    "tape": "^4.6.0"
   },
   "repository": {
     "type": "",
