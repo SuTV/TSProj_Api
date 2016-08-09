@@ -1,0 +1,150 @@
+<ul class="breadcrumb bg-white b-a">
+  <li><a ng-href="{{'/course/' + ((course.name ? course.name : '') | slug).toLowerCase() + '/' + course.id + '/'}}"><i class="glyphicon glyphicon-book text-muted m-r-xs"></i> <span ng-bind="course.name"></span> </a></li>
+  <li ng-show="lecture && lecture.id"><a ng-href="{{'/lecture/' + ((lecture.title ? lecture.title : '') | slug).toLowerCase() + '/' + lecture.id + '/'}}" ng-bind="lecture.title"></a></li>
+  <li class="active" ng-bind="exam.title"></li>
+</ul>
+<div class="card">
+    <div class="card-heading">
+      <div class="row">
+        <div class="col-sm-10"><h2 ng-bind="exam.title"></h2></div>
+        <div class="col-sm-2 pull-right" ng-if="isSubmitted && totalRightAnswers !== null && !isMyOwnData(course.userId)">
+          <h2 ng-bind="'Score: ' + totalRightAnswers + '/' + questions.length"></h2>
+        </div>
+      </div>
+      <div class="text-xs font-thin text-muted">
+        <span ng-bind="exam.startTime | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'"></span> - <span ng-bind="exam.endTime | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'"></span>
+        <strong ng-show="!isStarted">(Length: {{exam.lengthInMinutes}} <!-- {{ exam.endTime | amDifference:  exam.startTime : 'minutes'}} --> minutes)</strong>
+        <strong ng-show="isStarted" countdown end-date="{{exam.endTime}}" units="{{'Hours | Minutes | Seconds'}}"></strong>
+      </div>
+      <div class="m-t-md" ng-bind-html="exam.description"></div>
+    </div>
+    <div class="card-tools" ng-if="isMyOwnData(course.userId)">
+      <ul class="list-inline">
+        <li class="dropdown">
+          <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+            <i class="mdi-navigation-more-vert text-md"></i>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+            <li><a href ng-click="openCreateEditQuestionModal(null)">Add question</a></li>
+            <li><a href ng-click="openEditExamModal()">Edit</a></li>
+            <li><a href ng-click="deleteExam($event)">Delete</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body bg-light lt">
+      <div class="row" ng-if="!isStarted && !isSubmitted && !isLoading && !isMyOwnData(course.userId) && questions.length === 0">
+        <div class="col-md-12 m-t-sm">
+          <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+              <button md-ink-ripple class="btn btn-fw btn-lg btn-warning btn-block" ng-click="startExam($event)">Start</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="(isStarted || isSubmitted || isMyOwnData(course.userId)) && questions.length > 0" ng-init="isMyData = isMyOwnData(course.userId)">
+        <div class="col-md-12 m-b-sm" ng-repeat="question in questions">
+          <div class="tl-content panel panel-card block" ng-init="userAnswer = (isSubmitted ? getAnswerByQuestion(question.id) : null)" ng-show="question.content && question.content.trim().length > 0">
+            <div class="text-lt p-h m-b-sm">
+              <span class="badge pull-left m-r-sm" ng-bind="($index+1)"></span>
+              <div ng-bind-html="question.content"></div>
+            </div>
+            <div class="card-tools custom-card-tools" ng-if="isMyData">
+              <ul class="list-inline">
+                <li class="dropdown">
+                  <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                    <i class="mdi-navigation-more-vert text-md"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                    <li><a href ng-click="openCreateEditAnswerModal(question.id, null)" ng-show="question.questionType === 0 || question.questionType === 1">Add answer</a></li>
+                    <li><a href ng-click="openCreateEditQuestionModal(question)">Edit</a></li>
+                    <li><a href ng-click="deleteQuestion($event, question.id)">Delete</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="p b-t b-light" ng-if="(question.questionType === 0 || question.questionType === 1) && question.answers.length > 0">
+              <div class="row">
+                <div class="col-sm-6" ng-repeat="answer in question.answers">
+                  <p>
+                    <label class="md-check" ng-if="question.questionType === 1" ng-init="isSelected1 = isSelectedAnswer(userAnswer.answerIds, answer.id)">
+                      <input type="checkbox" name="c_{{question.id}}" ng-value="answer.id" ng-click="selectAnswer(question.id, question.questionType, answer.id, null)" ng-checked="isSelected1 || (isMyData && answer.isCorrect)" ng-disabled="isSubmitted || isMyData">
+                      <i ng-class="isSelected1 && answer.isCorrect ? 'green' : (isSelected1 && !answer.isCorrect ? 'red' : 'blue')"></i>
+                      <span ng-bind="answer.content" ng-class="isSubmitted && answer.isCorrect ? 'text-success font-bold' : ''"></span>
+                    </label>
+                    <label class="md-check" ng-if="question.questionType === 0" ng-init="isSelected0 = userAnswer && userAnswer.answerId === answer.id">
+                      <input type="radio" name="r_{{question.id}}" ng-value="answer.id" ng-click="selectAnswer(question.id, question.questionType, answer.id, null)" ng-checked="isSelected0 || (isMyData && answer.isCorrect)" ng-disabled="isSubmitted || isMyData">
+                      <i ng-class="isSelected0 && answer.isCorrect ? 'green' : (isSelected0 && !answer.isCorrect ? 'red' : 'blue')"></i>
+                      <span ng-bind="answer.content" ng-class="isSubmitted && answer.isCorrect ? 'text-success font-bold' : ''"></span>
+                    </label>
+                  </p>
+                  <div class="card-tools margin-top--15" ng-if="isMyData">
+                    <ul class="list-inline">
+                      <li class="dropdown">
+                        <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                          <i class="mdi-navigation-more-vert text-md"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                          <li><a href ng-click="openCreateEditAnswerModal(question.id, answer)">Edit</a></li>
+                          <li><a href ng-click="deleteAnswer($event, answer.id)">Delete</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p b-t b-light" ng-if="question.questionType === 2 || question.questionType === 3">
+              <div class="row">
+                <div class="col-sm-6">
+                  <p>
+                    <label class="md-check" ng-init="isSelectedT = userAnswer && userAnswer.isAnswerYesOrTrue === true">
+                      <input type="radio" name="r_{{question.id}}" ng-value="1" ng-click="selectAnswer(question.id, question.questionType, null, true)" ng-checked="isSelectedT || (isMyData && question.isAnswerYesOrTrue === true)" ng-disabled="isSubmitted || isMyData">
+                      <i ng-class="isSelectedT && question.isAnswerYesOrTrue === true ? 'green' : (isSelectedT && question.isAnswerYesOrTrue === false ? 'red' : 'blue')"></i>
+                      <span ng-bind="question.questionType === 2 ? 'True' : 'Yes'" ng-class="isSubmitted && question.isAnswerYesOrTrue === true ? 'text-success font-bold' : ''"></span>
+                    </label>
+                  </p>
+                </div>
+                <div class="col-sm-6">
+                  <p>
+                    <label class="md-check" ng-init="isSelectedF = userAnswer && userAnswer.isAnswerYesOrTrue === false">
+                      <input type="radio" name="r_{{question.id}}" ng-value="0" ng-click="selectAnswer(question.id, question.questionType, null, false)" ng-checked="isSelectedF || (isMyData && question.isAnswerYesOrTrue === false)" ng-disabled="isSubmitted || isMyData">
+                      <i ng-class="isSelectedF && question.isAnswerYesOrTrue === false ? 'green' : (isSelectedF && question.isAnswerYesOrTrue === true ? 'red' : 'blue')"></i>
+                      <span ng-bind="question.questionType === 2 ? 'False' : 'No'" ng-class="isSubmitted && question.isAnswerYesOrTrue === false ? 'text-success font-bold' : ''"></span>
+                    </label>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 m-t-sm" ng-if="isMyData || (!isMyData && isStarted && !isSubmitted)">
+          <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+              <button ng-if="!isMyData && isStarted && !isSubmitted" ng-click="submitAnswers()" md-ink-ripple class="btn btn-fw btn-lg btn-dark btn-block">Submit</button>
+              <button ng-if="isMyData" md-ink-ripple class="btn btn-fw btn-lg btn-success btn-block" ng-click="openCreateEditQuestionModal(null)">Create new question</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" ng-if="(isStarted || isMyOwnData(course.userId)) && questions.length == 0">
+        <div class="col-md-12 m-t-sm">
+          <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 text-center">
+              <span>There are no questions.</span>
+              <button ng-if="isMyOwnData(course.userId)" md-ink-ripple class="btn btn-fw btn-lg btn-success btn-block m-t-md" ng-click="openCreateEditQuestionModal(null)">Create new question</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/ng-template" id="createEditExamModalContent.html">
+    <div ng-include="'views/modal/exam/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createCreateEditQuestionModalContent.html">
+    <div ng-include="'views/modal/question/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createCreateEditAnswerModalContent.html">
+    <div ng-include="'views/modal/answer/create_edit_modal.html'"></div>
+  </script>

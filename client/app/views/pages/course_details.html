@@ -1,0 +1,290 @@
+  <div class="row">
+    <div class="col-sm-7">
+      <div class="row row-sm">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-heading">
+              <a ng-href="{{'/user/' + ((course.user ? course.user.username : '') | slug) + '/' + course.user.id + '/'}}" class="pull-left w-32 m-r" popover-placement="bottom-left" popover-is-open="canOpenUserPopover(course.id)" uib-popover-template="'popoverUserQuickInfo.html'" ng-mouseover="callOpenUserPopover(true, course.id, course.user.id)" ng-mouseleave="callOpenUserPopover(false, course.id, course.user.id)" popover-popup-delay="200" popover-popup-close-delay="500">
+                <img src="{{getUserAvatar(course.user.userContainerName, course.user.avatarFileName)}}" class="w-full img-circle">
+              </a>
+              <div class="clear">
+                <a ng-href="{{'/user/' + ((course.user ? course.user.username : '') | slug) + '/' + course.user.id + '/'}}" class="font-bold" ng-bind="course.user.firstName || course.user.lastName ? course.user.firstName + ' ' + course.user.lastName : course.user.username"></a>
+                <div class="text-xxs font-thin text-muted"><strong ng-bind="course.category.name"></strong> - <span am-time-ago="course.created"></span></div>
+              </div>
+            </div>
+            <div class="card-tools custom-card-tools-c">
+              <button class="btn btn-xs btn-default m-l-xs" ng-click="likeCourse(course.id, course.extra.liked, course.extra.likedReaction)"><span class="text-muted"><i ng-class="course.extra.liked ? 'glyphicon glyphicon-heart text-danger' : 'glyphicon glyphicon-heart'"></i> Like <small ng-bind="'(' + course.extra.totalLikes + ')'"></small> </span></button>
+
+              <span ng-if="isMyOwnData(course.user.id)" class="text-muted text-xs m-l-sm m-t-xs"><i ng-class="course.extra.joined ? 'glyphicon glyphicon-user text-danger' : 'glyphicon glyphicon-user'"></i> <small ng-bind="course.extra.totalJoins"></small> </span>
+
+              <button ng-if="!isMyOwnData(course.user.id)" class="btn btn-xs btn-default m-l-xs" ng-click="joinCourse(course.id, course.extra.joined, course.extra.joinedReaction)"><span class="text-muted"><i ng-class="course.extra.joined ? 'glyphicon glyphicon-log-out text-danger' : 'glyphicon glyphicon-log-in'"></i> Join <small ng-bind="'(' + course.extra.totalJoins + ')'"></small> </span></button>
+
+              <ul class="list-inline m-l-xs pull-right" style="margin-top: -3px">
+                <li class="dropdown">
+                  <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                    <i class="mdi-navigation-more-vert text-md"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color" ng-if="!isMyOwnData(course.user.id)">
+                    <li><a href ng-click="favorCourse(course.id, course.extra.favored, course.extra.favoredReaction)" ng-bind="course.extra.favored ? 'Remove from favorites' : 'Add to favorites'"></a></li>
+                    <li><a href ng-click="openReportModal(course)">Report</a></li>
+                  </ul>
+                  <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color" ng-if="isMyOwnData(course.user.id)">
+                    <li><a href ng-click="openCreateEditPlanModal(null)">Add plan</a></li>
+                    <li><a href ng-click="openCreateEditStreamlineModal(null)">Add streamline</a></li>
+                    <li><a href ng-click="openCreateEditAttachmentModal(null)">Add attachment</a></li>
+                    <li><a href ng-click="openCreateExamModal()">Add exam</a></li>
+                    <li><a href ng-click="openEditCourseModal()">Edit</a></li>
+                    <li><a href ng-click="deleteCourse($event)">Delete</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body no-padding-v" ng-show="course.description && course.description.trim().length > 0">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="panel b-a pos-rlt">
+                    <span class="arrow top pull-left b-white"></span>
+                    <div class="panel-body">
+                      <span ng-bind="course.description"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <img ng-src="{{getImageRectangle(course.courseContainerName, course.bannerFileName)}}" class="w-full" alt="{{course.name}}">
+              <div class="favorite-holder favorite-holder-white" ng-if="course.extra.favored">
+                <i class="mdi-action-grade i-24 text-warning"></i>
+              </div>
+            </div>
+            <script type="text/ng-template" id="popoverShare.html">
+              <div ng-include="'views/popover/share.html'"></div>
+            </script>
+            <button md-ink-ripple class="md-btn md-fab blue m-r md-fab-offset pull-right" uib-popover-template="'popoverShare.html'" popover-placement="left"><i class="mdi-social-share i-24"></i></button>
+            <div class="card-body">
+              <h3 class="no-margin m-b" ng-bind="course.name"></h3>
+              <div ng-bind-html="course.content">
+              </div>
+              <div class="m-t-sm" ng-show="course.courseTags.length > 0">
+                <span>Tags : </span>
+                <a class="badge bg-black m-r-xs" ng-repeat="courseTag in course.courseTags" ng-href="{{'/search/#/?tag=' + courseTag.tag.name}}" ng-bind="courseTag.tag.name"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <h5 class="no-margin m-b">Files and Attachments</h5>
+          <ul class="list-group md-whiteframe-z0">
+            <li class="list-group-item" ng-repeat="attachment in attachments">
+              <a href="../api/containers/{{attachment.containerName}}/download/{{attachment.fileName}}" target="_blank"><span class="block"> <i class="fa fa-file-excel-o"></i> &nbsp; <span ng-bind="attachment.name"></span> </span></a>
+              <div class="card-tools custom-card-tools" ng-if="isMyOwnData(course.user.id)">
+                <ul class="list-inline">
+                  <li class="dropdown">
+                    <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                      <i class="mdi-navigation-more-vert text-md"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                      <li><a href ng-click="openCreateEditAttachmentModal(attachment)">Edit</a></li>
+                      <li><a href ng-click="deleteAttachment($event, attachment)">Delete</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <span class="clear text-muted" ng-bind="attachment.description"></span>
+            </li>
+            <li class="list-group-item" ng-if="attachments.length === 0">
+              <span>There are no files and attachments now.</span>
+              <div class="card-tools custom-card-tools-x" ng-if="isMyOwnData(course.user.id)">
+                <ul class="list-inline">
+                  <li class="dropdown">
+                    <a ng-click="openCreateEditAttachmentModal(null)" md-ink-ripple class="md-btn md-flat md-btn-circle">
+                      <i class="mdi-content-add text-md"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-12">
+          <h5 class="no-margin m-b">Exams</h5>
+            <div class="list-group md-whiteframe-z0" ng-show="exams.length > 0">
+              <a ng-repeat="exam in exams" ng-href="{{'/exam/' + (exam.title | slug).toLowerCase() + '/' + exam.id + '/'}}" class="list-group-item">
+                <span class="pull-right text-muted m-l-xs"><i class="glyphicon glyphicon-chevron-right"></i></span>
+                <span class="pull-right label bg-info m-l-xs" ng-bind="isSameDate(exam.startTime, exam.endTime) ? ((exam.startTime | date:'dd-MM-yyyy H:mm') + ' - ' + (exam.endTime | date:'H:mm')) : ((exam.startTime | date:'dd-MM-yyyy H:mm') + ' - ' + (exam.endTime | date:'dd-MM-yyyy H:mm'))"></span>
+                <span ng-bind="exam.title"></span>
+              </a>
+            </div>
+            <ul class="list-group md-whiteframe-z0" ng-if="exams.length === 0">
+              <li class="list-group-item">
+                <span>There are no exams now.</span>
+                <div class="card-tools custom-card-tools-x" ng-if="isMyOwnData(course.user.id)">
+                  <ul class="list-inline">
+                    <li class="dropdown">
+                      <a ng-click="openCreateExamModal()" md-ink-ripple class="md-btn md-flat md-btn-circle">
+                        <i class="mdi-content-add text-md"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+        </div>
+        <div class="col-sm-12" ng-hide="true">
+          <h5 class="no-margin m-b">Comments</h5>
+          <ul class="list-group md-whiteframe-z0">
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a1.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Jonathan Doe</a>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a2.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Jack Michale</a>
+                Sectetur adipiscing elit
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a3.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Jessi</a>
+                Sectetur adipiscing elit
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a href class="pull-left w-40 m-r"><img src="images/a4.jpg" class="img-responsive img-circle"></a>
+              <div class="clear">
+                <a href class="font-bold block">Sodake</a>
+                Vestibulum ullamcorper sodales nisi nec condimentum
+              </div>
+            </li>
+            <li class="list-group-item">
+              <a class="pull-left w-32 m-r"><img src="images/a3.jpg" class="w-full img-circle" alt="..."></a>
+              <form>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Say something">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">SEND</button>
+                  </span>
+                </div>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <div class="row m-b">
+        <div class="col-sm-12">
+          <div class="tl-content panel panel-card dk block no-padding-bottom">
+            <span class="arrow b-white left pull-top"></span>
+            <div class="text-lt p-h m-b-sm">
+              <strong><i class="fa fa-bolt text-primary m-r-xs"></i> Live streaming schedule</strong>
+              <div class="card-tools custom-card-tools" ng-if="isMyOwnData(course.user.id)">
+                <ul class="list-inline">
+                  <li class="dropdown">
+                    <a ng-click="openCreateEditStreamlineModal(null)" md-ink-ripple class="md-btn md-flat md-btn-circle">
+                      <i class="mdi-content-add text-md"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <ul class="list-group md-whiteframe-z0">
+              <li class="list-group-item" ng-repeat="streamline in streamlines">
+                <a class="text-ellipsis m-r-lg" ng-href="{{'/course/' + (course.name | slug).toLowerCase() + '/streamlines/' + course.id + '/#/?streamlineId=' + streamline.id}}"> <span ng-class="streamline.type === 1 ? 'pull-left text-danger m-r-sm' : 'pull-left text-warning m-r-sm' "><i class="fa fa-circle text-xs"></i></span> <span ng-bind="streamline.title"></span> </a>
+                <small class="text-muted text-md font-thin m-l"> <span ng-bind="streamline.type === 1 ? ((streamline.startTime | date:'H:mm') + ' - ' + (streamline.endTime | date:'H:mm')) : (isSameDate(streamline.startTime, streamline.endTime) ? ((streamline.startTime | date:'dd-MM-yyyy H:mm') + ' - ' + (streamline.endTime | date:'H:mm')) : ((streamline.startTime | date:'dd-MM-yyyy H:mm') + ' - ' + (streamline.endTime | date:'dd-MM-yyyy H:mm')) )"></span></small>
+                <div class="card-tools custom-card-tools-x" ng-if="isMyOwnData(course.user.id)">
+                  <ul class="list-inline">
+                    <li class="dropdown">
+                      <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                        <i class="mdi-navigation-more-vert text-md"></i>
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                        <li><a href ng-click="openCreateEditStreamlineModal(streamline)">Edit</a></li>
+                        <li><a href ng-click="deleteStreamline($event, streamline.id)">Delete</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li class="list-group-item" ng-hide="streamlines.length > 0">
+                <span class="text-ellipsis m-r-lg"> <span class="pull-left text-muted m-r-sm"><i class="fa fa-circle text-xs"></i></span> There are no streams now.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <ul class="timeline" ng-class="{'timeline-center': center}">
+        <li class="tl-header" ng-if="isMyOwnData(course.user.id)">
+          <div class="btn btn-default" ng-click="openCreateEditPlanModal(null)">Add plan</div>
+        </li>
+        <li class="tl-item" ng-show="plans.length === 0">
+          <div class="tl-wrap">
+            <span class="tl-date text-muted"></span>
+            <div class="tl-content panel panel-card p-sm text-muted">
+              <span class="arrow b-white left pull-top"></span>
+              <div>
+              There are no plans now.
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="tl-item" ng-repeat="plan in plans">
+          <div ng-class="plan.lectures.length > 0 ? 'tl-wrap b-success' : 'tl-wrap b-primary'">
+            <span class="tl-date text-muted" ng-bind="buildPlanTime(plan.startTime, plan.endTime)"></span>
+            <div ng-class="plan.lectures.length > 0 ? 'tl-content panel panel-card dk block no-padding-bottom' : 'tl-content panel panel-card bg-primary dk block padding-bottom-1'">
+              <span ng-class="plan.lectures.length > 0 ? 'arrow b-white left pull-top' : 'arrow b-primary left pull-top'"></span>
+              <div class="text-lt p-h m-b-sm">
+                <strong ng-bind="plan.title"></strong>
+              </div>
+              <div class="card-tools custom-card-tools" ng-if="isMyOwnData(course.user.id)">
+                <ul class="list-inline">
+                  <li class="dropdown">
+                    <a md-ink-ripple data-toggle="dropdown" class="md-btn md-flat md-btn-circle">
+                      <i class="mdi-navigation-more-vert text-md"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-scale pull-right pull-up top text-color">
+                      <li><a href ng-click="openCreateLectureModal(plan.id)">Add lecture</a></li>
+                      <li><a href ng-click="openCreateEditPlanModal(plan)">Edit</a></li>
+                      <li><a href ng-click="deletePlan($event, plan.id)">Delete</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <div class="list-group md-whiteframe-z0" ng-show="plan.lectures.length > 0">
+                <a class="list-group-item" ng-repeat="lecture in plan.lectures" ng-href="{{'/lecture/' + (lecture.title | slug).toLowerCase() + '/' + lecture.id + '/'}}">
+                  <span ng-bind="lecture.title"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script type="text/ng-template" id="popoverUserQuickInfo.html">
+    <div ng-include="'views/popover/user_quick_info.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditStreamlineModalContent.html">
+    <div ng-include="'views/modal/streamline/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditAttachmentModalContent.html">
+    <div ng-include="'views/modal/attachment/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditLectureModalContent.html">
+    <div ng-include="'views/modal/lecture/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditPlanModalContent.html">
+    <div ng-include="'views/modal/plan/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditExamModalContent.html">
+    <div ng-include="'views/modal/exam/create_edit_modal.html'"></div>
+  </script>
+  <script type="text/ng-template" id="createEditCourseModalContent.html">
+    <div ng-include="'views/modal/course/create_edit_modal.html'"></div>
+  </script>
+  <a ng-if="isAuthenticated" href ng-click="openCreateCourseModal()" md-ink-ripple class="md-btn md-fab m-b md-fab-bottom-right pos-fix green"><i class="mdi-content-add i-24"></i></a>

@@ -2,11 +2,9 @@ var path = require("path");
 
 module.exports = function(app) {
 	var router = app.loopback.Router();
-	var baseUrl = app.get('baseUrl');
 
     router.get('/', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'home',
 	      	pageTitle: 'Home',
 	      	pageDescription: ''
@@ -15,7 +13,6 @@ module.exports = function(app) {
 
   	router.get('/category/:categorySlug/:categoryId', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'category',
 	      	pageTitle: 'Category',
 	      	pageDescription: ''
@@ -24,7 +21,6 @@ module.exports = function(app) {
 
   	router.get('/search', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'search',
 	      	pageTitle: 'Search result',
 	      	pageDescription: ''
@@ -33,7 +29,6 @@ module.exports = function(app) {
 
   	router.get('/course/:courseSlug/:courseId', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'course',
 	      	pageTitle: 'Course details',
 	      	pageDescription: ''
@@ -42,7 +37,6 @@ module.exports = function(app) {
 
   	router.get('/course/:courseSlug/streamlines/:courseId', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'streamlines',
 	      	pageTitle: 'Course streamlines',
 	      	pageDescription: ''
@@ -51,7 +45,6 @@ module.exports = function(app) {
 
   	router.get('/lecture/:lectureSlug/:lectureId', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'lecture',
 	      	pageTitle: 'Lecture details',
 	      	pageDescription: ''
@@ -60,7 +53,6 @@ module.exports = function(app) {
 
   	router.get('/exam/:examSlug/:examId', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'exam',
 	      	pageTitle: 'Exam details',
 	      	pageDescription: ''
@@ -69,7 +61,6 @@ module.exports = function(app) {
 
   	router.get('/user/:userNameSlug/:userId', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'user',
 	      	pageTitle: 'User profile',
 	      	pageDescription: ''
@@ -78,7 +69,6 @@ module.exports = function(app) {
 
   	router.get('/user/:userNameSlug/:userId/settings', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'user_settings',
 	      	pageTitle: 'User settings',
 	      	pageDescription: ''
@@ -87,7 +77,6 @@ module.exports = function(app) {
 
   	router.get('/pricing', function(req, res) {
 	    res.render('index', {
-	    	baseUrl: baseUrl,
 	    	currentRoute: 'pricing',
 	      	pageTitle: 'Pricing',
 	      	pageDescription: ''
@@ -105,7 +94,6 @@ module.exports = function(app) {
 
   	// router.get('/404', function(req, res) {
 	  //   res.render('index', {
-	  //   	baseUrl: baseUrl,
 	  //   	currentRoute: '404',
 	  //     	pageTitle: 'Not found',
 	  //     	pageDescription: ''
@@ -114,7 +102,6 @@ module.exports = function(app) {
 
   	// router.get('/500', function(req, res) {
 	  //   res.render('index', {
-	  //   	baseUrl: baseUrl,
 	  //   	currentRoute: '500',
 	  //     	pageTitle: 'Internal error',
 	  //     	pageDescription: ''
